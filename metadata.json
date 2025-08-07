@@ -1,0 +1,6 @@
+{
+  "name": "Chat with InJourney Airport AI",
+  "description": "An internal AI assistant for InJourney Airports to help employees find information from uploaded internal documents.",
+  "requestFramePermissions": [],
+  "prompt": ""
+}

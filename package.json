@@ -1,0 +1,28 @@
+{
+  "name": "chat-with-injourney-airport-ai",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "@google/generative-ai": "^0.24.1",
+    "mammoth": "^1.9.1",
+    "marked": "13.0.0",
+    "ml-distance": "^4.0.1",
+    "nanoid": "^3.3.11",
+    "pdf-parse": "^1.1.1",
+    "react": "^19.1.0",
+    "react-dom": "^19.1.0",
+    "tesseract.js": "^6.0.1"
+  },
+  "devDependencies": {
+    "@types/node": "^22.14.0",
+    "@vitejs/plugin-react": "^4.7.0",
+    "typescript": "~5.7.2",
+    "vite": "^6.2.0"
+  }
+}

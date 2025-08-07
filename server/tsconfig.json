@@ -1,0 +1,20 @@
+{
+  "compilerOptions": {
+    "target": "es2022",
+    "module": "commonjs",
+    "strict": true,
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true,
+    "outDir": "./dist",
+    "rootDir": "./src",
+    "typeRoots": ["./node_modules/@types", "./types"],
+    "baseUrl": ".", // This must be set for paths to work
+    "paths": {
+        "langchain_community/embeddings": ["./node_modules/langchain-community/embeddings"],
+        "langchain_community/vectorstores": ["./node_modules/langchain-community/vectorstores"]
+    }
+  },
+  "include": ["src/**/*.ts", "types/**/*.d.ts"],
+  "exclude": ["node_modules"]
+}

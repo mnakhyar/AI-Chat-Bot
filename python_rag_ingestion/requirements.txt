@@ -1,0 +1,20 @@
+# requirements.txt for Python RAG Ingestion System
+
+# Document Loading
+langchain
+unstructured[pdf,docx,csv]  # Installs necessary parsers for PDF, DOCX, CSV
+pypdf                      # For PyMuPDFLoader (or other PDF loaders)
+python-docx                # For Word documents
+openpyxl                   # Required by unstructured for .xlsx (good to have for general office docs)
+python-magic               # For file type detection by unstructured
+pymupdf                    # Required for PyMuPDFLoader
+
+# Text Splitting
+# Already covered by langchain
+
+# Embedding
+sentence-transformers      # For all-MiniLM-L6-v2 or bge-base-en-v1.5
+
+# Vector Storage
+faiss-cpu                  # For in-memory FAISS vector store (CPU version)
+langchain_community 
