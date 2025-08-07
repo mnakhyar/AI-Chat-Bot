@@ -2,8 +2,6 @@ import React, { useState } from 'react';
 
 interface Settings {
   model: 'gemini' | 'deepseek';
-  geminiKey?: string;
-  deepseekUrl?: string;
 }
 
 interface Props {
@@ -48,38 +46,57 @@ const SettingsModal: React.FC<Props> = ({ show, initial, onSave, onClose, onTest
         <h2 className="text-lg font-bold mb-4">Pengaturan AI</h2>
         <div className="space-y-4">
           <div>
-            <label className="font-semibold block mb-2">Pilih Model</label>
+            <label className="font-semibold block mb-2">Pilih Model AI</label>
             <div className="flex items-center gap-4">
               <label className="flex items-center gap-1">
-                <input type="radio" name="model" value="gemini" checked={settings.model==='gemini'} onChange={()=>handleChangeModel('gemini')} />
-                Gemini
+                <input 
+                  type="radio" 
+                  name="model" 
+                  value="gemini" 
+                  checked={settings.model === 'gemini'} 
+                  onChange={() => handleChangeModel('gemini')} 
+                />
+                <span className="ml-2">Gemini AI</span>
               </label>
               <label className="flex items-center gap-1">
-                <input type="radio" name="model" value="deepseek" checked={settings.model==='deepseek'} onChange={()=>handleChangeModel('deepseek')} />
-                Deepseek
+                <input 
+                  type="radio" 
+                  name="model" 
+                  value="deepseek" 
+                  checked={settings.model === 'deepseek'} 
+                  onChange={() => handleChangeModel('deepseek')} 
+                />
+                <span className="ml-2">Deepseek AI</span>
               </label>
             </div>
           </div>
 
-          {settings.model==='gemini' && (
-            <div>
-              <label className="font-semibold block mb-1">Gemini API Key</label>
-              <input type="text" value={settings.geminiKey||''} onChange={e=>setSettings(prev=>({...prev, geminiKey:e.target.value}))} className="w-full border rounded px-3 py-2" placeholder="Masukkan API Key" />
-            </div>
-          )}
-          {settings.model==='deepseek' && (
-            <div>
-              <label className="font-semibold block mb-1">Deepseek URL</label>
-              <input type="text" value={settings.deepseekUrl||''} onChange={e=>setSettings(prev=>({...prev, deepseekUrl:e.target.value}))} className="w-full border rounded px-3 py-2" placeholder="http://host:11434" />
-            </div>
-          )}
+          <div className="bg-blue-50 p-3 rounded-lg">
+            <p className="text-sm text-blue-800">
+              <strong>Info:</strong> Konfigurasi API key dan URL telah diatur secara internal untuk keamanan.
+            </p>
+          </div>
 
-          {testResult && <p className="text-sm">{testResult}</p>}
+          {testResult && (
+            <div className={`p-3 rounded-lg ${testResult.includes('Berhasil') ? 'bg-green-50 text-green-800' : 'bg-red-50 text-red-800'}`}>
+              <p className="text-sm">{testResult}</p>
+            </div>
+          )}
 
           <div className="flex justify-end gap-3 pt-4">
-            <button onClick={onClose} className="px-4 py-2 text-gray-600 hover:text-gray-800">Tutup</button>
-            <button onClick={handleTest} className="px-4 py-2 bg-blue-500 text-white rounded disabled:opacity-50" disabled={testing}>{testing?'Menguji...':'Test koneksi'}</button>
-            <button onClick={handleSave} className="px-4 py-2 bg-green-600 text-white rounded">Simpan</button>
+            <button onClick={onClose} className="px-4 py-2 text-gray-600 hover:text-gray-800">
+              Tutup
+            </button>
+            <button 
+              onClick={handleTest} 
+              className="px-4 py-2 bg-blue-500 text-white rounded disabled:opacity-50" 
+              disabled={testing}
+            >
+              {testing ? 'Menguji...' : 'Test Koneksi'}
+            </button>
+            <button onClick={handleSave} className="px-4 py-2 bg-green-600 text-white rounded">
+              Simpan
+            </button>
           </div>
         </div>
       </div>

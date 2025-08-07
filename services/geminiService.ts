@@ -1,11 +1,10 @@
 
 import { GoogleGenerativeAI, GenerateContentResult } from '@google/generative-ai';
-import { Document } from '../types'; // Assuming Document type is still relevant for context passing
+import { Document } from '../types';
+import { AI_CONFIG } from '../config/ai-config';
 
-const DEFAULT_GEMINI_KEY = 'YOUR_GEMINI_API_KEY'; // Placeholder - user should replace this
-
-let geminiApiKey: string | null = DEFAULT_GEMINI_KEY;
-let ai: GoogleGenerativeAI | null = new GoogleGenerativeAI(DEFAULT_GEMINI_KEY);
+let geminiApiKey: string | null = AI_CONFIG.GEMINI.API_KEY;
+let ai: GoogleGenerativeAI | null = new GoogleGenerativeAI(AI_CONFIG.GEMINI.API_KEY);
 
 export function setGeminiApiKey(key: string) {
   console.log('[Gemini] set key', key.slice(0,6)+'***');
@@ -14,7 +13,7 @@ export function setGeminiApiKey(key: string) {
 }
 
 export function isGeminiConfigured() {
-  return !!geminiApiKey && geminiApiKey !== DEFAULT_GEMINI_KEY;
+  return !!geminiApiKey && geminiApiKey !== 'YOUR_GEMINI_API_KEY_HERE';
 }
 
 const SYSTEM_INSTRUCTION = `Anda adalah asisten AI internal yang profesional, akurat, dan sangat terpercaya untuk InJourney Airports. Nama Anda adalah 'InJourney Airport AI'.
@@ -37,7 +36,7 @@ const chatSessions = new Map<string, any>();
 
 function getChatSession(chatId: string) {
   if (!ai) { console.error('[Gemini] AI belum diinisialisasi'); }
-  const MODEL_NAME = 'gemini-2.0-flash'; // use flash variant as requested
+  const MODEL_NAME = AI_CONFIG.GEMINI.MODEL;
   console.log('[Gemini] getChatSession', { chatId, model: MODEL_NAME });
   if (chatSessions.has(chatId)) return chatSessions.get(chatId)!;
 

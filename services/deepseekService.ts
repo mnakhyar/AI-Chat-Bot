@@ -1,8 +1,9 @@
 import { Document } from '../types';
+import { AI_CONFIG } from '../config/ai-config';
 
-// Konfigurasi untuk Deepseek API
-let baseUrl = 'http://10.20.42.214:11434';
-export function setDeepseekUrl(url:string){baseUrl=url;}
+// Konfigurasi untuk Deepseek API menggunakan internal config
+let baseUrl = AI_CONFIG.DEEPSEEK.URL;
+export function setDeepseekUrl(url: string) { baseUrl = url; }
 const DEEPSEEK_API_URL = () => `${baseUrl}/api/chat`;
 
 const SYSTEM_INSTRUCTION = `Anda adalah asisten AI internal yang profesional, akurat, dan sangat terpercaya untuk InJourney Airports. Nama Anda adalah 'InJourney Airport AI'.
@@ -101,7 +102,7 @@ async function sendToDeepseek(messages: string[]): Promise<string> {
                 'Content-Type': 'application/json',
             },
             body: JSON.stringify({
-                model: "deepseek-r1:7b",
+                model: AI_CONFIG.DEEPSEEK.MODEL,
                 messages: formattedMessages,
                 stream: false  // Request a single JSON response instead of a streaming NDJSON response
             }),

@@ -8,11 +8,10 @@ import { GeminiService, setGeminiApiKey, isGeminiConfigured } from './services/g
 import { DeepseekService, setDeepseekUrl } from './services/deepseekService';
 import * as apiService from './services/apiService';
 import { ChatSession, Document, Message, Role } from './types';
+import { AI_CONFIG, getCurrentModelConfig } from './config/ai-config';
 
 type Settings = {
   model: 'gemini' | 'deepseek';
-  geminiKey?: string;
-  deepseekUrl?: string;
 };
 
 const App: React.FC = () => {
@@ -26,7 +25,7 @@ const App: React.FC = () => {
   const [showSettings, setShowSettings] = useState(false);
   const [settings, setSettings] = useState<Settings>(() => {
     const saved = localStorage.getItem('injourney-settings');
-    return saved ? JSON.parse(saved) : { model: 'gemini', geminiKey: '', deepseekUrl: 'http://127.0.0.1:11434' };
+    return saved ? JSON.parse(saved) : { model: AI_CONFIG.DEFAULT_MODEL };
   });
 
   // --- Effects ---
@@ -45,11 +44,17 @@ const App: React.FC = () => {
     fetchDocuments();
   }, []);
 
-  // Persist settings to localStorage
+  // Persist settings to localStorage and setup AI services
   useEffect(() => {
     localStorage.setItem('injourney-settings', JSON.stringify(settings));
-    if (settings.geminiKey) setGeminiApiKey(settings.geminiKey);
-    if (settings.deepseekUrl) setDeepseekUrl(settings.deepseekUrl);
+    
+    // Setup AI services with internal configuration
+    const config = getCurrentModelConfig(settings.model);
+    if (settings.model === 'gemini') {
+      setGeminiApiKey(AI_CONFIG.GEMINI.API_KEY);
+    } else if (settings.model === 'deepseek') {
+      setDeepseekUrl(AI_CONFIG.DEEPSEEK.URL);
+    }
   }, [settings]);
 
   // Notification timeout
@@ -157,18 +162,19 @@ const App: React.FC = () => {
   };
 
   const testConnection = async (cfg: Settings): Promise<boolean> => {
-    try{
-        if(cfg.model==='deepseek'){
-           // simple fetch to health endpoint
-           if(!cfg.deepseekUrl) return false;
-           const res = await fetch(`${cfg.deepseekUrl}/api/tags`);
-           return res.ok;
-        }else{
-           if(!cfg.geminiKey) return false;
-           setGeminiApiKey(cfg.geminiKey);
-           return isGeminiConfigured();
-        }
-     }catch{return false;}
+    try {
+      if (cfg.model === 'deepseek') {
+        // Test Deepseek connection using internal config
+        const res = await fetch(`${AI_CONFIG.DEEPSEEK.URL}/api/tags`);
+        return res.ok;
+      } else {
+        // Test Gemini connection using internal config
+        setGeminiApiKey(AI_CONFIG.GEMINI.API_KEY);
+        return isGeminiConfigured();
+      }
+    } catch {
+      return false;
+    }
   };
 
   // --- Render ---
