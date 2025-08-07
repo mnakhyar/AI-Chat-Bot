@@ -9,9 +9,15 @@ import { DeepseekService, setDeepseekUrl } from './services/deepseekService';
 import * as apiService from './services/apiService';
 import { ChatSession, Document, Message, Role } from './types';
 import { AI_CONFIG, getCurrentModelConfig } from './config/ai-config';
+import { githubActionsService } from './services/githubActionsService';
 
 type Settings = {
   model: 'gemini' | 'deepseek';
+  githubActions?: {
+    enabled: boolean;
+    autoDeploy: boolean;
+    testOnPush: boolean;
+  };
 };
 
 const App: React.FC = () => {
@@ -25,7 +31,14 @@ const App: React.FC = () => {
   const [showSettings, setShowSettings] = useState(false);
   const [settings, setSettings] = useState<Settings>(() => {
     const saved = localStorage.getItem('injourney-settings');
-    return saved ? JSON.parse(saved) : { model: AI_CONFIG.DEFAULT_MODEL };
+    return saved ? JSON.parse(saved) : { 
+      model: AI_CONFIG.DEFAULT_MODEL,
+      githubActions: {
+        enabled: false,
+        autoDeploy: false,
+        testOnPush: true,
+      }
+    };
   });
 
   // --- Effects ---
@@ -54,6 +67,11 @@ const App: React.FC = () => {
       setGeminiApiKey(AI_CONFIG.GEMINI.API_KEY);
     } else if (settings.model === 'deepseek') {
       setDeepseekUrl(AI_CONFIG.DEEPSEEK.URL);
+    }
+
+    // Update GitHub Actions configuration
+    if (settings.githubActions) {
+      githubActionsService.updateConfig(settings.githubActions);
     }
   }, [settings]);
 
